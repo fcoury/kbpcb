@@ -1,0 +1,17 @@
+{
+  "name": "kbpcb",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Felipe Coury <felipe.coury@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "ejs-lint": "^0.3.0",
+    "random-hex-string": "^1.0.0",
+    "sexpr-plus": "^7.0.0"
+  }
+}
