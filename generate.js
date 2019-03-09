@@ -4,7 +4,7 @@ const parseLayout = require('./layout');
 const genSchematics = require('./schematics');
 const genPCB = require('./pcb');
 
-const { layout } = parseLayout(JSON.parse(fs.readFileSync('fixtures/gutkb.json', 'utf8')));
+const { layout } = parseLayout(JSON.parse(fs.readFileSync('fixtures/elevate.json', 'utf8')));
 
 // console.log('layout', layout);
 
