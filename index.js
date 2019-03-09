@@ -35,9 +35,10 @@ app.post('/submit', (req, res) => {
     }
     console.log('files.document', files.document.toJSON());
     const { document } = files;
+    const docName = path.basename(document.name).split('.')[0];
     const data = JSON.parse(fs.readFileSync(document.path, 'utf8'));
-    const { layout } = parseLayout(data, document.name);
-    const name = fields.name;
+    const { layout } = parseLayout(data, docName);
+    const name = fields.name || docName;
     makeZip(name, layout, res);
   });
 });
