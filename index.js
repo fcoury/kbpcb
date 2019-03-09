@@ -14,11 +14,11 @@ const app = express();
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.raw({limit: '50mb'}));
 
-const makeZip = (name, layout, res) => {
+const makeZip = (name, layout, res, borders={}) => {
   res.setHeader('Content-disposition', `attachment; filename=${name}-pcb.zip`);
   const zip = new JSZip();
   zip.file(`${name}.sch`, genSchematics(layout));
-  zip.file(`${name}.kicad_pcb`, genPCB(layout));
+  zip.file(`${name}.kicad_pcb`, genPCB(layout, borders));
   zip
     .generateNodeStream({streamFiles:true})
     .pipe(res)
@@ -39,7 +39,12 @@ app.post('/submit', (req, res) => {
     const data = JSON.parse(fs.readFileSync(document.path, 'utf8'));
     const { layout } = parseLayout(data, docName);
     const name = fields.name || docName;
-    makeZip(name, layout, res);
+    console.log('fields', fields);
+    const borders = {
+      edge:    fields.borderSpacing,
+      corners: fields.borderRound,
+    };
+    makeZip(name, layout, res, borders);
   });
 });
 

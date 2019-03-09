@@ -1,6 +1,80 @@
-<h1>PCB Generator</h1>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MrKeebs PCB Generator</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.css" />
+    <style>
+      .field, .file {
+        margin-bottom: .75rem;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="section">
+      <div class="container">
+        <h1 class="title">
+          MrKeebs PCB Generator
+        </h1>
+        <p class="subtitle">
+          Create KiCad PCB files from KLE json files
+        </p>
 
-<form action="/submit" enctype="multipart/form-data" method="POST">
-  <input type="file" name="document" />
-  <input type="submit" />
-</form>
+        <form action="/submit" enctype="multipart/form-data" method="POST">
+
+          <div class="file is-boxed">
+            <label class="file-label">
+              <input class="file-input" type="file" name="document">
+              <span class="file-cta">
+                <span class="file-icon">
+                  <i class="fas fa-upload"></i>
+                </span>
+                <span class="file-label">
+                  Select KLE json file...
+                </span>
+              </span>
+            </label>
+          </div>
+
+
+          <!--
+          <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label">Border Spacing</label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <p class="control is-expanded has-icons-left">
+                  <input class="input" type="text" placeholder="mm" name="borderSpacing" value="5">
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label">Round Edge</label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <p class="control is-expanded has-icons-left">
+                  <input class="input" type="text" placeholder="mm" name="borderRound" value="1">
+                </p>
+              </div>
+              <p class="help">Zero means square corners</p>
+            </div>
+          </div>
+          -->
+
+          <div class="field" style="padding-top: 30px;">
+            <div class="control">
+              <button class="button is-link">Generate</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+  </body>
+</html>

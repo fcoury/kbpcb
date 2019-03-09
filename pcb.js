@@ -15,11 +15,12 @@ const BORDER_CORNERS   = 1;
 
 class Pcb {
   constructor(layout, borders={}) {
+    console.log(' *** borders', borders);
     this.layout = layout;
     this.borders = {};
-    this.borders.footprint = borders.footprint || BORDER_FOOTPRINT;
-    this.borders.corners   = borders.corners   || BORDER_CORNERS;
-    this.borders.edge      = borders.edge ? borders.edge + this.borders.footprint : BORDER_EDGE;
+    this.borders.footprint = borders.footprint ? parseInt(borders.footprint, 10) : BORDER_FOOTPRINT;
+    this.borders.corners   = borders.corners   ? parseInt(borders.corders, 10) : BORDER_CORNERS;
+    this.borders.edge      = borders.edge      ? parseInt(borders.edge, 10) + this.borders.footprint : BORDER_EDGE;
   }
 
   generate() {
@@ -44,7 +45,6 @@ class Pcb {
     this.layout.forEach((row, ri) => {
       row.forEach((k, ci) => {
         if (typeof k === 'object') {
-          console.log('k', k);
           size = k.w || 1;
           if (k.x) {
             x += 1905 * k.x;
@@ -63,7 +63,6 @@ class Pcb {
           const diodeNetIndex = [...netSet].indexOf(diodeNet);
           const key = { name, size, x: x/100, y: y/100 };
           const data = { key, diodeNet, diodeNetIndex, colNet, colNetIndex, genId };
-          console.log('key.size', k, key.size);
           modulesArr.push(render('templates/pcb/switch.ejs', data));
           modulesArr.push(render('templates/pcb/diode.ejs', data));
           mx = Math.max(x, mx);
@@ -105,4 +104,4 @@ class Pcb {
   }
 }
 
-module.exports = (file) => new Pcb(file).generate();
+module.exports = (file, borders) => new Pcb(file).generate();
