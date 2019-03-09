@@ -6,7 +6,8 @@ const render = require('./render');
 const getName = require('./name');
 
 const DEBUG = false;
-const INIT_X = 61;
+const INIT_X = 30;
+const INIT_Y = 30;
 
 class Pcb {
   constructor(layout) {
@@ -27,13 +28,16 @@ class Pcb {
     const prefix = randomHex(2);
 
     let x = INIT_X * 100;
-    let y = 65 * 100;
+    let y = INIT_Y * 100;
 
     this.layout.forEach((row, ri) => {
       row.forEach((k, ci) => {
         if (typeof k === 'object') {
           console.log('k', k);
-          size = k.w || k.x || 1;
+          size = k.w || 1;
+          if (k.x) {
+            x += 1905 * k.x;
+          }
           if (k.y) {
             y += 1905 * k.y;
           }
@@ -53,9 +57,9 @@ class Pcb {
           console.log('key.size', k, key.size);
           modulesArr.push(render('templates/pcb/switch.ejs', data));
           modulesArr.push(render('templates/pcb/diode.ejs', data));
+          x += (1905 * size);
           size = 1;
         }
-        x += (1905 * size);
         cn++;
       });
       cn = 0;
