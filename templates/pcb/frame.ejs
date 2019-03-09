@@ -1,0 +1,8 @@
+  (gr_line (start <%= x0+border %> <%= y0 %>) (end <%= x1-border %> <%= y0 %>) (layer Edge.Cuts) (width 0.2))
+  (gr_line (start <%= x1 %> <%= y0+border %>) (end <%= x1 %> <%= y1-border %>) (layer Edge.Cuts) (width 0.2))
+  (gr_line (start <%= x1-border %> <%= y1 %>) (end <%= x0+border %> <%= y1 %>) (layer Edge.Cuts) (width 0.2))
+  (gr_line (start <%= x0 %> <%= y1-border %>) (end <%= x0 %> <%= y0+border %>) (layer Edge.Cuts) (width 0.2))
+  (gr_arc (start <%= x0+border %> <%= y0+border %>) (end <%= x0+border %> <%= y0 %>) (angle -90) (layer Edge.Cuts) (width 0.2))
+  (gr_arc (start <%= x1-border %> <%= y0+border %>) (end <%= x1-border %> <%= y0 %>) (angle 90) (layer Edge.Cuts) (width 0.2))
+  (gr_arc (start <%= x1-border %> <%= y1-border %>) (end <%= x1-border %> <%= y1 %>) (angle -90) (layer Edge.Cuts) (width 0.2))
+  (gr_arc (start <%= x0+border %> <%= y1-border %>) (end <%= x0+border %> <%= y1 %>) (angle 90) (layer Edge.Cuts) (width 0.2))
