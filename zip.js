@@ -2,7 +2,6 @@ const fs = require('fs');
 const JSZip = require('jszip');
 
 const addFolder = (files, folder) => {
-  console.log('folder', folder);
   fs.readdirSync(`${__dirname}/${folder}`).forEach(file => {
     const fileName = `${folder}/${file}`;
     if (fs.lstatSync(`${__dirname}/${fileName}`).isDirectory()) {
