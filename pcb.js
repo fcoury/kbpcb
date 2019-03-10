@@ -96,8 +96,8 @@ class Pcb {
           const data = { key, diodeNet, diodeNetIndex, colNet, colNetIndex, genId };
           modulesArr.push(render('templates/pcb/switch.ejs', data));
           modulesArr.push(render('templates/pcb/diode.ejs', data));
-          mx = Math.max(x, mx);
           x += (1905 * size);
+          mx = Math.max(x, mx);
           size = 1;
 
           if (h) {
@@ -118,6 +118,9 @@ class Pcb {
       }
       x = rx || INIT_X * 100;
     });
+
+    // adjusts mx
+    mx -= 1905;
 
     // frame
     const lineData = {
