@@ -37,6 +37,8 @@ class Pcb {
 
     const modulesArr = [];
     const netSet = new Set();
+    netSet.add('GND');
+    netSet.add('VCC');
     const prefix = randomHex(2);
     const genId = () => `${prefix}${randomHex(2)}`.toUpperCase();
 
@@ -122,7 +124,7 @@ class Pcb {
     // adjusts mx
     mx -= 1905;
 
-    // frame
+    // frame and planes
     const lineData = {
       x0: INIT_X - this.borders.edge,
       y0: INIT_Y - this.borders.edge,
@@ -130,7 +132,7 @@ class Pcb {
       y1: my/100 + this.borders.edge,
       border: this.borders.corners,
     };
-    modulesArr.push(render('templates/pcb/frame.ejs', lineData));
+    modulesArr.push(render('templates/pcb/frame.ejs', { ...lineData }));
 
     // usb port
     const width = mx - (INIT_X * 100);
@@ -141,6 +143,10 @@ class Pcb {
       genId
     };
     modulesArr.push(render('templates/pcb/usb.ejs', data));
+
+    // ground plane
+    modulesArr.push(render('templates/pcb/plane.ejs', { ...lineData, layer: 'F.Cu', netName: 'GND' }));
+    modulesArr.push(render('templates/pcb/plane.ejs', { ...lineData, layer: 'B.Cu', netName: 'VCC' }));
 
     return {
       modules: modulesArr.join(''),
