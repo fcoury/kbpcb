@@ -17,7 +17,10 @@ class Schematics {
 
   generate() {
     const components = this.generateComponents();
-    return render('templates/matrix.ejs', { components });
+    return {
+      main:   render('templates/schematics.ejs', { components }),
+      matrix: render('templates/matrix.ejs', { components }),
+    }
   }
 
   generateComponents() {

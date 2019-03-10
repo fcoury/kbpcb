@@ -39,7 +39,7 @@ app.post('/submit', (req, res) => {
 
       const zipFiles = [
         [`${name}.pro`, fs.readFileSync('templates/project.pro')],
-        [`${name}.sch`, genSchematics(layout)],
+        [`${name}.sch`, genSchematics(layout).matrix],
         [`${name}.kicad_pcb`, genPCB(layout, borders)],
         [`sym-lib-table`, fs.readFileSync('templates/sym-lib-table')],
         [`fp-lib-table`, fs.readFileSync('templates/fp-lib-table')],
