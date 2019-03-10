@@ -4,28 +4,16 @@ const util = require('util');
 const express = require('express');
 const bodyParser = require('body-parser');
 const formidable = require('formidable')
-const JSZip = require('jszip');
 
 const parseLayout = require('./layout');
 const genSchematics = require('./schematics');
 const genPCB = require('./pcb');
 
+const { addFolder, makeZip } = require('./zip');
+
 const app = express();
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.raw({limit: '50mb'}));
-
-const makeZip = (name, layout, res, borders={}) => {
-  res.setHeader('Content-disposition', `attachment; filename=${name}-pcb.zip`);
-  const zip = new JSZip();
-  zip.file(`${name}.sch`, genSchematics(layout));
-  zip.file(`${name}.kicad_pcb`, genPCB(layout, borders));
-  zip
-    .generateNodeStream({streamFiles:true})
-    .pipe(res)
-    .on('finish', function () {
-      res.end();
-    });
-};
 
 app.post('/submit', (req, res) => {
   new formidable.IncomingForm().parse(req, (err, fields, files) => {
@@ -44,7 +32,21 @@ app.post('/submit', (req, res) => {
       edge:    fields.borderSpacing,
       corners: fields.borderRound,
     };
-    makeZip(name, layout, res, borders);
+
+    const zipFiles = [
+      [`${name}.pro`, fs.readFileSync('templates/project.pro')],
+      [`${name}.sch`, genSchematics(layout)],
+      [`${name}.kicad_pcb`, genPCB(layout, borders)],
+      [`sym-lib-table`, fs.readFileSync('templates/sym-lib-table')],
+      [`fp-lib-table`, fs.readFileSync('templates/fp-lib-table')],
+    ];
+    addFolder(zipFiles, 'keyboard_parts.pretty');
+    addFolder(zipFiles, 'MX_ALPS_Hybrid.pretty');
+    addFolder(zipFiles, 'kicad_lib_tmk');
+
+    zip = makeZip(res, zipFiles);
+
+    res.setHeader('Content-disposition', `attachment; filename=${name}-pcb.zip`);
   });
 });
 
