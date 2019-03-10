@@ -15,7 +15,6 @@ const BORDER_CORNERS   = 1;
 
 class Pcb {
   constructor(layout, borders={}) {
-    console.log(' *** borders', borders);
     this.layout = layout;
     this.borders = {};
     this.borders.footprint = borders.footprint ? parseInt(borders.footprint, 10) : BORDER_FOOTPRINT;
@@ -45,11 +44,17 @@ class Pcb {
     let y = INIT_Y * 100;
     let mx = 0;
     let my = 0;
+    let h = null;
 
     this.layout.forEach((row, ri) => {
       row.forEach((k, ci) => {
         if (typeof k === 'object') {
           size = k.w || 1;
+
+          // height
+          if (k.h) {
+            h = k.h;
+          }
 
           // rotation
           if (k.r) {
@@ -78,16 +83,29 @@ class Pcb {
           netSet.add(colNet);
           netSet.add(diodeNet);
 
+          if (h) {
+            rotation = 180;
+            size = h;
+            x -= 1905 / 2;
+            y += 1905 / 2;
+          }
+
           const colNetIndex = [...netSet].indexOf(colNet);
           const diodeNetIndex = [...netSet].indexOf(diodeNet);
           const key = { name, size, x: x/100, y: y/100, rotation };
           const data = { key, diodeNet, diodeNetIndex, colNet, colNetIndex, genId };
-          console.log('key', key);
           modulesArr.push(render('templates/pcb/switch.ejs', data));
           modulesArr.push(render('templates/pcb/diode.ejs', data));
           mx = Math.max(x, mx);
           x += (1905 * size);
           size = 1;
+
+          if (h) {
+            h = null;
+            rotation = null;
+            x += 1905 / 2;
+            y -= 1905 / 2;
+          }
         }
         cn++;
       });
@@ -99,7 +117,6 @@ class Pcb {
         y += 1905;
       }
       x = rx || INIT_X * 100;
-      console.log('x', x);
     });
 
     // frame
