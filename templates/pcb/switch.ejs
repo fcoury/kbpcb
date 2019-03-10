@@ -1,5 +1,5 @@
 (module MX_Alps_Hybrid:MX-<%= key.size %>U-NoLED (layer F.Cu) (tedit 5A9F5203) (tstamp <%= genId() %>)
-  (at <%= key.x + ((((key.size) - 1) * 1905)/100)/2 %> <%= key.y %>)
+  (at <%= key.x + ((((key.size) - 1) * 1905)/100)/2 %> <%= key.y %><%= key.rotation ? ` ${90-key.rotation}` : `` %>)
   (fp_text reference K_<%= key.name %> (at 0 3.175) (layer Dwgs.User)
     (effects (font (size 1 1) (thickness 0.15)))
   )

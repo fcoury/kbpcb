@@ -32,6 +32,10 @@ class Pcb {
     let size = 1; // 1u
     let cn = 0;
 
+    let rotation = null;
+    let rx = null;
+    let ry = null;
+
     const modulesArr = [];
     const netSet = new Set();
     const prefix = randomHex(2);
@@ -46,6 +50,21 @@ class Pcb {
       row.forEach((k, ci) => {
         if (typeof k === 'object') {
           size = k.w || 1;
+
+          // rotation
+          if (k.r) {
+            rotation = k.r;
+          }
+          if (k.rx) {
+            x = (INIT_X * 100) + k.rx * 1905;
+            rx = x;
+          }
+          if (k.ry) {
+            y = (INIT_Y * 100) + k.ry * 1905;
+            ry = y;
+          }
+
+          // xy adjustments
           if (k.x) {
             x += 1905 * k.x;
           }
@@ -61,8 +80,9 @@ class Pcb {
 
           const colNetIndex = [...netSet].indexOf(colNet);
           const diodeNetIndex = [...netSet].indexOf(diodeNet);
-          const key = { name, size, x: x/100, y: y/100 };
+          const key = { name, size, x: x/100, y: y/100, rotation };
           const data = { key, diodeNet, diodeNetIndex, colNet, colNetIndex, genId };
+          console.log('key', key);
           modulesArr.push(render('templates/pcb/switch.ejs', data));
           modulesArr.push(render('templates/pcb/diode.ejs', data));
           mx = Math.max(x, mx);
@@ -73,8 +93,13 @@ class Pcb {
       });
       cn = 0;
       my = Math.max(y, my);
-      y += 1905;
-      x = INIT_X * 100;
+      if (ry) {
+        y = ry;
+      } else {
+        y += 1905;
+      }
+      x = rx || INIT_X * 100;
+      console.log('x', x);
     });
 
     // frame
