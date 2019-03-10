@@ -58,7 +58,7 @@ class Schematics {
 
           if (cn == 0) {
             const rowLabel = { x: x - COL_LABEL_X_GAP, y: y + COL_LABEL_Y_GAP, text: `row${ri}` };
-            componentsArr.push(render('templates/schematics/label.ejs', rowLabel));
+            componentsArr.push(render('templates/schematics/glabel.ejs', rowLabel));
 
             // row connection to row label
             const rowLine = { x0: x - COL_LABEL_X_GAP, y0: y + COL_LABEL_Y_GAP, x1: x - 350, y1: y + COL_LABEL_Y_GAP }
@@ -72,7 +72,7 @@ class Schematics {
           if (ri === 0) {
             // column label
             const colLabel = { x: x + 300, y: y - ROW_LABEL_Y_GAP, text: `col${cn}` };
-            componentsArr.push(render('templates/schematics/label.ejs', colLabel));
+            componentsArr.push(render('templates/schematics/glabel.ejs', colLabel));
 
             // column connection to column label
             const colLine = { x0: x + 300, y0: y - ROW_LABEL_Y_GAP, x1: x + 300, y1: y }
