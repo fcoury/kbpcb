@@ -22,11 +22,12 @@ class Component {
     const name = net
       ? net
       : `Net-(${this.name}-Pad${index+1})`;
-    this.pads.push(NetRepo.add(name));
+    NetRepo.add(name)
+    this.pads.push(name);
   }
 
-  setPad(n, net) {
-    this.pads[n-1] = net;
+  setPad(n, pad) {
+    this.pads[n-1] = pad;
   }
 
   netForPad(n) {
@@ -34,13 +35,13 @@ class Component {
     return NetRepo.get(net);
   }
 
-  connect(sourcePad, targetPad, targetComp) {
-    console.log(sourcePad, targetPad, targetComp);
-    console.log(targetComp.netForPad(targetPad));
-    console.log(this.pads);
+  pad(n) {
+    return this.pads[n-1];
+  }
 
-    this.setPad(sourcePad, targetComp.netForPad(targetPad));
-    console.log(this.pads);
+  connect(sourcePad, targetPad, targetComp) {
+    const targetNet = targetComp.pad(targetPad);
+    this.setPad(sourcePad, targetNet);
   }
 
   render(x, y, rotation) {

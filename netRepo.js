@@ -2,10 +2,16 @@
 class NetRepo {
   constructor() {
     this.nets = new Set();
+    this.add('');
   }
 
   get array() {
     return [...this.nets];
+  }
+
+  clear() {
+    this.nets.clear();
+    this.add('');
   }
 
   format(net) {
@@ -38,14 +44,9 @@ const NET_REPO = Symbol.for("MrKeebs.KbPCB.NetRepo");
 var globalSymbols = Object.getOwnPropertySymbols(global);
 var exists = (globalSymbols.indexOf(NET_REPO) > -1);
 
-  console.log(exists);
-
 if (!exists) {
   global.NET_REPO = new NetRepo();
 }
-
-console.log(global.NET_REPO);
-console.log(global.NET_REPO);
 
 // define the singleton API
 // ------------------------

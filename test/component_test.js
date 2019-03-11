@@ -24,15 +24,18 @@ describe('Component', () => {
     });
 
     it('renders default pads', () => {
-      expect(comp.render(10, 15)).to.contain('(net 1 "Net-(D1-Pad1)")');
-      expect(comp.render(10, 15)).to.contain('(net 2 "Net-(D1-Pad2)")');
+      const str = comp.render(10, 15);
+      expect(str).to.contain('(net 1 "Net-(D1-Pad1)")');
+      expect(str).to.contain('(net 2 "Net-(D1-Pad2)")');
     });
 
-    it.only('renders defined nets', () => {
+    it('renders connected nets', () => {
       const comp1 = new Component('diode', 'D1', 2, () => 123);
       const comp2 = new Component('diode', 'D2', 2, () => 123);
       comp1.connect(1, 2, comp2);
-      expect(comp.render(10, 15)).to.contain('"Net-(D2-Pad2)"');
+
+      const str = comp1.render(10, 15);
+      expect(str).to.contain('"Net-(D2-Pad2)"');
     });
   });
 });
