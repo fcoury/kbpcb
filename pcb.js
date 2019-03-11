@@ -67,6 +67,7 @@ class Pcb {
   }
 
   addResistor(name, data) {
+    this.addNet(`${name}-Pad2`)
     this.addComponent('resistor', name, data);
   }
 
@@ -173,15 +174,26 @@ class Pcb {
     };
     this.modulesArr.push(render('templates/pcb/frame.ejs', { ...lineData }));
 
-    // usb port
-    const width = mx - (INIT_X * 100);
-    const height = my - (INIT_Y * 100);
-    const usbData = {
-      x: ((INIT_X * 100) + (width / 2)) / 100,
-      y: INIT_Y - this.borders.edge + 5.5,
-      genId
-    };
-    this.modulesArr.push(render('templates/pcb/usb.ejs', usbData));
+    // nets
+    this.addNet('J1-Pad2');
+    this.addNet('J1-Pad3');
+    this.addNet('J1-Pad4');
+
+    this.addNet('U1-Pad3');
+    this.addNet('U1-Pad4');
+    this.addNet('U1-Pad7');
+    this.addNet('U1-Pad12');
+    this.addNet('U1-Pad21');
+    this.addNet('U1-Pad22');
+    this.addNet('U1-Pad25');
+    this.addNet('U1-Pad26');
+    this.addNet('U1-Pad27');
+    this.addNet('U1-Pad34');
+    this.addNet('U1-Pad35');
+    this.addNet('U1-Pad36');
+    this.addNet('U1-Pad42');
+    this.addNet('U1-Pad43');
+    this.addNet('U1-Pad44');
 
     // crystal capacitors
     this.addCap('XC1', {
@@ -194,20 +206,6 @@ class Pcb {
       y: INIT_Y,
       rotation: 90,
     });
-
-    // crystal
-    const crystalData = {
-      name: 'X1',
-      x: mx/100 + this.borders.edge + 15,
-      y: INIT_Y,
-      rotation: null,
-      c1Net: 'Net-(XC1-Pad1)',
-      c1NetIndex: [...this.netSet].indexOf('Net-(XC1-Pad1)'),
-      c2Net: 'Net-(XC2-Pad1)',
-      c2NetIndex: [...this.netSet].indexOf('Net-(XC2-Pad1)'),
-      genId,
-    };
-    this.modulesArr.push(render('templates/pcb/crystal.ejs', crystalData));
 
     // ground and VCC planes
     this.modulesArr.push(render('templates/pcb/plane.ejs', { ...lineData, layer: 'F.Cu', netName: 'GND' }));
@@ -250,19 +248,31 @@ class Pcb {
       x: mx/100 + this.borders.edge + 5,
       y: INIT_Y + 25,
       rotation: 90,
+      res: '10k',
     });
     this.addResistor('R2', {
       x: mx/100 + this.borders.edge + 23,
       y: INIT_Y + 10,
       rotation: 90,
+      res: '10k',
     });
     this.addResistor('R3', {
       x: mx/100 + this.borders.edge + 5,
       y: INIT_Y - 10,
+      res: '22',
+      net: {
+        pad1: { name: 'Net-(U1-Pad3)', index: this.netIdx('Net-(U1-Pad3)') },
+        pad2: { name: 'Net-(J1-Pad2)', index: this.netIdx('Net-(J1-Pad2)') },
+      },
     });
     this.addResistor('R4', {
       x: mx/100 + this.borders.edge + 10,
       y: INIT_Y - 10,
+      res: '22',
+      net: {
+        pad1: { name: 'Net-(U1-Pad4)', index: this.netIdx('Net-(U1-Pad4)') },
+        pad2: { name: 'Net-(J1-Pad3)', index: this.netIdx('Net-(J1-Pad3)') },
+      },
     });
     this.addNet('R1-Pad2');
     this.addNet('R2-Pad2');
@@ -277,21 +287,37 @@ class Pcb {
       netIndex: this.netIdx('Net-(R1-Pad1)'),
     });
 
+    // usb port
+    const width = mx - (INIT_X * 100);
+    const height = my - (INIT_Y * 100);
+    const usbData = {
+      x: ((INIT_X * 100) + (width / 2)) / 100,
+      y: INIT_Y - this.borders.edge + 5.5,
+      net: {
+        pad2: { index: this.netIdx('Net-(J1-Pad2)'), name: 'Net-(J1-Pad2)' },
+        pad3: { index: this.netIdx('Net-(J1-Pad3)'), name: 'Net-(J1-Pad3)' },
+        pad4: { index: this.netIdx('Net-(J1-Pad4)'), name: 'Net-(J1-Pad4)' },
+      },
+      genId,
+    };
+    this.modulesArr.push(render('templates/pcb/usb.ejs', usbData));
+
+    // crystal
+    const crystalData = {
+      name: 'X1',
+      x: mx/100 + this.borders.edge + 15,
+      y: INIT_Y,
+      rotation: null,
+      c1Net: 'Net-(XC1-Pad1)',
+      c1NetIndex: [...this.netSet].indexOf('Net-(XC1-Pad1)'),
+      c2Net: 'Net-(XC2-Pad1)',
+      c2NetIndex: [...this.netSet].indexOf('Net-(XC2-Pad1)'),
+      genId,
+    };
+    this.modulesArr.push(render('templates/pcb/crystal.ejs', crystalData));
+
     // microcontroller
     const microNet = this.addNet('U1-Pad1');
-    this.addNet('U1-Pad7');
-    this.addNet('U1-Pad12');
-    this.addNet('U1-Pad21');
-    this.addNet('U1-Pad22');
-    this.addNet('U1-Pad25');
-    this.addNet('U1-Pad26');
-    this.addNet('U1-Pad27');
-    this.addNet('U1-Pad34');
-    this.addNet('U1-Pad35');
-    this.addNet('U1-Pad36');
-    this.addNet('U1-Pad42');
-    this.addNet('U1-Pad43');
-    this.addNet('U1-Pad44');
     const microData = {
       name: 'U1',
       x: mx/100 + this.borders.edge + 14,
