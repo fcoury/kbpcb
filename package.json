@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha",
+    "test": "./node_modules/.bin/mocha test/*.test.js test/**/*.test.js",
     "start": "node index.js"
   },
   "author": "Felipe Coury <felipe.coury@gmail.com>",

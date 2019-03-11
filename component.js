@@ -4,10 +4,19 @@ const NetRepo  = require('./netRepo').instance;
 const render = require('./render');
 const genId = () => `${prefix}${randomHex(2)}`.toUpperCase();
 
+const COMP_COUNTER = Symbol.for("MrKeebs.KbPCB.ComponentCounter");
+
+var globalSymbols = Object.getOwnPropertySymbols(global);
+var exists = (globalSymbols.indexOf(COMP_COUNTER) > -1);
+
+if (!exists) {
+  global.COMP_COUNTER = {};
+}
+
 class Component {
   constructor(type, compName, pads, _genId=genId, _netRepo) {
     this.type = type;
-    this.name = compName;
+    this.name = compName || `${type.charAt(0).toUpperCase()}${this.getNext()}`;
     this.pads = [];
     this.id = _genId();
     this.netRepo = _netRepo;
@@ -15,6 +24,12 @@ class Component {
     for (let index = 0; index < pads; index++) {
       this.addPad();
     }
+  }
+
+  getNext() {
+    const next = (global.COMP_COUNTER[this.type] || 0) + 1;
+    global.COMP_COUNTER[this.type] = next;
+    return next;
   }
 
   addPad(net) {
@@ -44,10 +59,14 @@ class Component {
     this.setPad(sourcePad, targetNet);
   }
 
+  getAdditionalData() {
+    return {};
+  }
+
   render(x, y, rotation) {
     const { id, name } = this;
     const netForPad = this.netForPad.bind(this);
-    const data = { id, name, x, y, rotation, netForPad };
+    const data = { id, name, x, y, rotation, netForPad, ...this.getAdditionalData() };
 
     return render(`templates/pcb/${this.type}.ejs`, { data });
   }

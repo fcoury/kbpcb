@@ -3,7 +3,7 @@ const { expect } = require('chai');
 
 require('../id');
 
-const comp = new Component('diode', 'D1', 2, () => 123);
+const comp = new Component('test', 'D1', 2, () => 123);
 
 describe('Component', () => {
   context('rendering', () => {
@@ -30,8 +30,8 @@ describe('Component', () => {
     });
 
     it('renders connected nets', () => {
-      const comp1 = new Component('diode', 'D1', 2, () => 123);
-      const comp2 = new Component('diode', 'D2', 2, () => 123);
+      const comp1 = new Component('test', 'D1', 2, () => 123);
+      const comp2 = new Component('test', 'D2', 2, () => 123);
       comp1.connect(1, 2, comp2);
 
       const str = comp1.render(10, 15);

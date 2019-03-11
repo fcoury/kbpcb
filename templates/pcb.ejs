@@ -89,8 +89,7 @@
       (outputdirectory ""))
   )
 
-  (net 0 "")
-  <% nets.forEach((n, i) => { %>(net <%= i+1 %> "<%= n %>")
+  <% nets.forEach((n, i) => { %>(net <%= i %> "<%= n %>")
   <% }); %>
   (net_class Default "This is the default net class."
     (clearance 0.2)

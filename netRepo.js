@@ -10,7 +10,7 @@ class NetRepo {
   }
 
   clear() {
-    this.nets.clear();
+    this.nets = new Set();
     this.add('');
   }
 
@@ -54,13 +54,10 @@ if (!exists) {
 var singleton = {};
 
 Object.defineProperty(singleton, "instance", {
-  get: function(){
+  get: function() {
     return global.NET_REPO;
   }
 });
-
-console.log('singleton', singleton);
-
 
 // ensure the API is never changed
 // -------------------------------
