@@ -13,6 +13,9 @@ const BORDER_FOOTPRINT = 5;
 const BORDER_EDGE      = BORDER_FOOTPRINT + 8;
 const BORDER_CORNERS   = 1;
 
+const prefix = randomHex(2);
+const genId = () => `${prefix}${randomHex(2)}`.toUpperCase();
+
 class Pcb {
   constructor(layout, borders={}) {
     this.layout = layout;
@@ -23,8 +26,48 @@ class Pcb {
   }
 
   generate() {
+    this.modulesArr = [];
+    this.netSet     = new Set();
+
     const data = this.generateModules();
     return render('templates/pcb.ejs', data);
+  }
+
+  addNet(name, formatted=true) {
+    const fmtName = formatted ? `Net-(${name})` : name;
+    this.netSet.add(fmtName);
+    return fmtName;
+  }
+
+  netIdx(name, formatted=false) {
+    if (formatted) {
+      return [...this.netSet].indexOf(`Net-(${name})`);
+    } else {
+      return [...this.netSet].indexOf(name);
+    }
+  }
+
+  addComponent(type, name, data) {
+    const net = this.addNet(`${name}-Pad1`);
+    const compData = {
+      name,
+      rotation: null,
+      net,
+      netIndex: this.netIdx(net),
+      genId,
+      ...data,
+    };
+    // console.log(name, 'compData', data);
+    // console.log(name, 'data', data);
+    this.modulesArr.push(render(`templates/pcb/${type}.ejs`, compData));
+  }
+
+  addCap(name, data) {
+    this.addComponent('cap', name, data);
+  }
+
+  addResistor(name, data) {
+    this.addComponent('resistor', name, data);
   }
 
   generateModules() {
@@ -35,12 +78,8 @@ class Pcb {
     let rx = null;
     let ry = null;
 
-    const modulesArr = [];
-    const netSet = new Set();
-    netSet.add('GND');
-    netSet.add('VCC');
-    const prefix = randomHex(2);
-    const genId = () => `${prefix}${randomHex(2)}`.toUpperCase();
+    this.addNet('GND', false);
+    this.addNet('VCC', false);
 
     let x = INIT_X * 100;
     let y = INIT_Y * 100;
@@ -80,10 +119,10 @@ class Pcb {
           }
         } else {
           const name = getName(k);
-          const colNet = `/col${ci}`;
-          const diodeNet = `Net-(D_${name}-Pad2)`;
-          netSet.add(colNet);
-          netSet.add(diodeNet);
+          this.addNet(`D_${name}-Pad2`)
+
+          const colNet = this.addNet(`/col${ci}`);
+          const diodeNet = this.addNet(`D_${name}-Pad2`);
 
           if (h) {
             rotation = 180;
@@ -92,12 +131,12 @@ class Pcb {
             y += 1905 / 2;
           }
 
-          const colNetIndex = [...netSet].indexOf(colNet);
-          const diodeNetIndex = [...netSet].indexOf(diodeNet);
+          const colNetIndex = this.netIdx(colNet);
+          const diodeNetIndex = this.netIdx(diodeNet);
           const key = { name, size, x: x/100, y: y/100, rotation };
           const data = { key, diodeNet, diodeNetIndex, colNet, colNetIndex, genId };
-          modulesArr.push(render('templates/pcb/switch.ejs', data));
-          modulesArr.push(render('templates/pcb/diode.ejs', data));
+          this.modulesArr.push(render('templates/pcb/switch.ejs', data));
+          this.modulesArr.push(render('templates/pcb/diode.ejs', data));
           x += (1905 * size);
           mx = Math.max(x, mx);
           size = 1;
@@ -132,25 +171,122 @@ class Pcb {
       y1: my/100 + this.borders.edge,
       border: this.borders.corners,
     };
-    modulesArr.push(render('templates/pcb/frame.ejs', { ...lineData }));
+    this.modulesArr.push(render('templates/pcb/frame.ejs', { ...lineData }));
 
     // usb port
     const width = mx - (INIT_X * 100);
     const height = my - (INIT_Y * 100);
-    const data = {
+    const usbData = {
       x: ((INIT_X * 100) + (width / 2)) / 100,
       y: INIT_Y - this.borders.edge + 5.5,
       genId
     };
-    modulesArr.push(render('templates/pcb/usb.ejs', data));
+    this.modulesArr.push(render('templates/pcb/usb.ejs', usbData));
 
-    // ground plane
-    modulesArr.push(render('templates/pcb/plane.ejs', { ...lineData, layer: 'F.Cu', netName: 'GND' }));
-    modulesArr.push(render('templates/pcb/plane.ejs', { ...lineData, layer: 'B.Cu', netName: 'VCC' }));
+    // crystal capacitors
+    this.addCap('XC1', {
+      x: mx/100 + this.borders.edge + 10,
+      y: INIT_Y,
+      rotation: 90,
+    });
+    this.addCap('XC2', {
+      x: mx/100 + this.borders.edge + 20,
+      y: INIT_Y,
+      rotation: 90,
+    });
+
+    // crystal
+    const crystalData = {
+      name: 'X1',
+      x: mx/100 + this.borders.edge + 15,
+      y: INIT_Y,
+      rotation: null,
+      c1Net: 'Net-(XC1-Pad1)',
+      c1NetIndex: [...this.netSet].indexOf('Net-(XC1-Pad1)'),
+      c2Net: 'Net-(XC2-Pad1)',
+      c2NetIndex: [...this.netSet].indexOf('Net-(XC2-Pad1)'),
+      genId,
+    };
+    this.modulesArr.push(render('templates/pcb/crystal.ejs', crystalData));
+
+    // ground and VCC planes
+    this.modulesArr.push(render('templates/pcb/plane.ejs', { ...lineData, layer: 'F.Cu', netName: 'GND' }));
+    this.modulesArr.push(render('templates/pcb/plane.ejs', { ...lineData, layer: 'B.Cu', netName: 'VCC' }));
+
+    // microcontroller capacitors
+    this.addCap('C1', {
+      x: mx/100 + this.borders.edge + 23,
+      y: INIT_Y + 15,
+      rotation: 90,
+    });
+    this.addCap('C2', {
+      x: mx/100 + this.borders.edge + 23,
+      y: INIT_Y + 5,
+      rotation: 90,
+    });
+    this.addCap('C3', {
+      x: mx/100 + this.borders.edge + 5,
+      y: INIT_Y + 5,
+      rotation: 90,
+    });
+    this.addCap('C4', {
+      x: mx/100 + this.borders.edge + 5,
+      y: INIT_Y,
+      rotation: 90,
+    });
+    this.addCap('C5', {
+      x: mx/100 + this.borders.edge + 5,
+      y: INIT_Y + 15,
+      rotation: 90,
+    });
+    this.addCap('C6', {
+      x: mx/100 + this.borders.edge + 5,
+      y: INIT_Y + 10,
+      rotation: 90,
+    });
+
+    // microcontroller
+    const microData = {
+      name: 'U1',
+      x: mx/100 + this.borders.edge + 14,
+      y: INIT_Y + 10,
+      rotation: null,
+      net: {},
+      genId,
+    };
+    this.modulesArr.push(render('templates/pcb/micro.ejs', microData));
+
+    // resistors
+    this.addResistor('R1', {
+      x: mx/100 + this.borders.edge + 5,
+      y: INIT_Y + 25,
+      rotation: 90,
+    });
+    this.addResistor('R2', {
+      x: mx/100 + this.borders.edge + 23,
+      y: INIT_Y + 10,
+      rotation: 90,
+    });
+    this.addResistor('R3', {
+      x: mx/100 + this.borders.edge + 5,
+      y: INIT_Y - 10,
+    });
+    this.addResistor('R4', {
+      x: mx/100 + this.borders.edge + 10,
+      y: INIT_Y - 10,
+    });
+
+    // reset
+    this.addComponent('reset', 'SW1', {
+      x: mx/100 + this.borders.edge + 14,
+      y: INIT_Y + 25,
+      net: 'Net-(R1-Pad1)',
+      netIndex: this.netIdx('Net-(R1-Pad1)'),
+    });
 
     return {
-      modules: modulesArr.join(''),
-      nets: [...netSet],
+      modules: this.modulesArr.join(''),
+      nets: [...this.netSet],
     };
   }
 }
