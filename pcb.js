@@ -1,7 +1,9 @@
+const NetRepo  = require('./netRepo').instance;
+
 const Keyboard = require('./keyboard');
 const Switch = require('./switch');
 const Diode = require('./diode');
-const NetRepo  = require('./netRepo').instance;
+const Plane = require('./plane');
 
 const render = require('./render');
 
@@ -22,10 +24,12 @@ class Pcb {
       const theSwitch = new Switch(k);
       const diode     = new Diode(k);
       theSwitch.connect(2, 2, diode);
-      diode.setPad(1, `/col${k.col}`);
       this.modules.push(theSwitch.render(k.x, k.y, k.rotation));
       this.modules.push(diode.render(k.x - 0.5, k.y, 90));
     });
+
+    this.modules.push(new Plane(keyboard, 'GND', 'F.Cu').render());
+    this.modules.push(new Plane(keyboard, 'VCC', 'B.Cu').render());
 
     const modules = this.modules.join('');
     const nets = NetRepo.array;

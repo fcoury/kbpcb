@@ -69,6 +69,7 @@ class Keyboard {
           this.keys.push(new Key(k, x, y, size, h, rotation, ri, cn));
 
           x += size;
+          mx = Math.max(x, mx);
           size = 1;
           maxCol = Math.max(cn, maxCol);
           cn += 1;
@@ -88,9 +89,12 @@ class Keyboard {
       }
       x = rx || 0;
       cn = 0;
+      my = Math.max(y, my);
     });
     this.cols = maxCol;
     this.rows = this.layout.length;
+    this.width = mx;
+    this.height = my;
   }
 }
 

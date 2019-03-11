@@ -1,8 +1,7 @@
 
 class NetRepo {
   constructor() {
-    this.nets = new Set();
-    this.add('');
+    this.clear();
   }
 
   get array() {
@@ -12,6 +11,8 @@ class NetRepo {
   clear() {
     this.nets = new Set();
     this.add('');
+    this.add('GND');
+    this.add('VCC');
   }
 
   format(net) {

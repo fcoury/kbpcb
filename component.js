@@ -66,7 +66,8 @@ class Component {
   render(x, y, rotation) {
     const { id, name } = this;
     const netForPad = this.netForPad.bind(this);
-    const data = { id, name, x, y, rotation, netForPad, ...this.getAdditionalData() };
+    const additionalData = this.getAdditionalData();
+    const data = { id, name, x, y, rotation, netForPad, ...additionalData };
 
     return render(`templates/pcb/${this.type}.ejs`, { data });
   }
