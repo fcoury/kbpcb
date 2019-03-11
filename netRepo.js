@@ -19,7 +19,11 @@ class NetRepo {
   }
 
   get(name) {
-    return this.format(this.array[this.indexOf(name)]);
+    const net = this.array[this.indexOf(name)];
+    if (!net) {
+      throw `Net with name ${name} not found`
+    }
+    return this.format(net);
   }
 
   indexOf(net) {

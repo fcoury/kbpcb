@@ -1,8 +1,9 @@
 const Component = require('./component');
 
 class Diode extends Component {
-  constructor(key) {
-    super('diode', `D_${key.name}`, 2);
+  constructor(k) {
+    super('diode', `D_${k.name}`, 2);
+    this.setPad(1, `/col${k.col}`);
   }
 }
 
