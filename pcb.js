@@ -245,17 +245,6 @@ class Pcb {
       rotation: 90,
     });
 
-    // microcontroller
-    const microData = {
-      name: 'U1',
-      x: mx/100 + this.borders.edge + 14,
-      y: INIT_Y + 10,
-      rotation: null,
-      net: {},
-      genId,
-    };
-    this.modulesArr.push(render('templates/pcb/micro.ejs', microData));
-
     // resistors
     this.addResistor('R1', {
       x: mx/100 + this.borders.edge + 5,
@@ -275,6 +264,10 @@ class Pcb {
       x: mx/100 + this.borders.edge + 10,
       y: INIT_Y - 10,
     });
+    this.addNet('R1-Pad2');
+    this.addNet('R2-Pad2');
+    this.addNet('R3-Pad2');
+    this.addNet('R4-Pad2');
 
     // reset
     this.addComponent('reset', 'SW1', {
@@ -283,6 +276,70 @@ class Pcb {
       net: 'Net-(R1-Pad1)',
       netIndex: this.netIdx('Net-(R1-Pad1)'),
     });
+
+    // microcontroller
+    const microNet = this.addNet('U1-Pad1');
+    this.addNet('U1-Pad7');
+    this.addNet('U1-Pad12');
+    this.addNet('U1-Pad21');
+    this.addNet('U1-Pad22');
+    this.addNet('U1-Pad25');
+    this.addNet('U1-Pad26');
+    this.addNet('U1-Pad27');
+    this.addNet('U1-Pad34');
+    this.addNet('U1-Pad35');
+    this.addNet('U1-Pad36');
+    this.addNet('U1-Pad42');
+    this.addNet('U1-Pad43');
+    this.addNet('U1-Pad44');
+    const microData = {
+      name: 'U1',
+      x: mx/100 + this.borders.edge + 14,
+      y: INIT_Y + 10,
+      rotation: null,
+      net: {
+        pad1: { name: 'Net-(U1-Pad1)', index: this.netIdx('Net-(U1-Pad1)') },
+        pad3: { name: 'Net-(R3-Pad1)', index: this.netIdx('Net-(R3-Pad1)') },
+        pad4: { name: 'Net-(R4-Pad1)', index: this.netIdx('Net-(R4-Pad1)') },
+        pad6: { name: 'Net-(C6-Pad1)', index: this.netIdx('Net-(C6-Pad1)') },
+        pad7: { name: 'Net-(U1-Pad7)', index: this.netIdx('Net-(U1-Pad7)') },
+        // pad8: { name: 'Net-(C6-Pad1)', index: this.netIdx('Net-(C6-Pad1)') },
+        // pad9: { name: 'Net-(C6-Pad1)', index: this.netIdx('Net-(C6-Pad1)') },
+        // pad10: { name: 'Net-(C6-Pad1)', index: this.netIdx('Net-(C6-Pad1)') },
+        // pad11: { name: 'Net-(C6-Pad1)', index: this.netIdx('Net-(C6-Pad1)') },
+        pad12: { name: 'Net-(U1-Pad12)', index: this.netIdx('Net-(U1-Pad12)') },
+        pad13: { name: 'Net-(R1-Pad1)', index: this.netIdx('Net-(R1-Pad1)') },
+        pad16: { name: 'Net-(C1-Pad1)', index: this.netIdx('Net-(C1-Pad1)') },
+        pad17: { name: 'Net-(C2-Pad1)', index: this.netIdx('Net-(C2-Pad1)') },
+        // pad18: { name: 'Net-(C6-Pad1)', index: this.netIdx('Net-(C6-Pad1)') },
+        // pad19: { name: 'Net-(C6-Pad1)', index: this.netIdx('Net-(C6-Pad1)') },
+        // pad20: { name: 'Net-(C6-Pad1)', index: this.netIdx('Net-(C6-Pad1)') },
+        pad21: { name: 'Net-(U1-Pad21)', index: this.netIdx('Net-(U1-Pad21)') },
+        pad22: { name: 'Net-(U1-Pad22)', index: this.netIdx('Net-(U1-Pad22)') },
+        pad25: { name: 'Net-(U1-Pad25)', index: this.netIdx('Net-(U1-Pad25)') },
+        pad26: { name: 'Net-(U1-Pad26)', index: this.netIdx('Net-(U1-Pad26)') },
+        pad27: { name: 'Net-(U1-Pad27)', index: this.netIdx('Net-(U1-Pad27)') },
+        // pad28: { name: 'Net-(C6-Pad1)', index: this.netIdx('Net-(C6-Pad1)') },
+        // pad29: { name: 'Net-(C6-Pad1)', index: this.netIdx('Net-(C6-Pad1)') },
+        // pad30: { name: 'Net-(C6-Pad1)', index: this.netIdx('Net-(C6-Pad1)') },
+        // pad31: { name: 'Net-(C6-Pad1)', index: this.netIdx('Net-(C6-Pad1)') },
+        // pad32: { name: 'Net-(C6-Pad1)', index: this.netIdx('Net-(C6-Pad1)') },
+        pad33: { name: 'Net-(R2-Pad2)', index: this.netIdx('Net-(R2-Pad2)') },
+        pad34: { name: 'Net-(U1-Pad34)', index: this.netIdx('Net-(U1-Pad34)') },
+        pad35: { name: 'Net-(U1-Pad35)', index: this.netIdx('Net-(U1-Pad35)') },
+        pad36: { name: 'Net-(U1-Pad36)', index: this.netIdx('Net-(U1-Pad36)') },
+        // pad37: { name: 'Net-(C6-Pad1)', index: this.netIdx('Net-(C6-Pad1)') },
+        // pad38: { name: 'Net-(C6-Pad1)', index: this.netIdx('Net-(C6-Pad1)') },
+        // pad39: { name: 'Net-(C6-Pad1)', index: this.netIdx('Net-(C6-Pad1)') },
+        // pad40: { name: 'Net-(C6-Pad1)', index: this.netIdx('Net-(C6-Pad1)') },
+        // pad41: { name: 'Net-(C6-Pad1)', index: this.netIdx('Net-(C6-Pad1)') },
+        pad42: { name: 'Net-(U1-Pad42)', index: this.netIdx('Net-(U1-Pad42)') },
+        pad43: { name: 'Net-(U1-Pad43)', index: this.netIdx('Net-(U1-Pad43)') },
+        pad44: { name: 'Net-(U1-Pad44)', index: this.netIdx('Net-(U1-Pad44)') },
+      },
+      genId,
+    };
+    this.modulesArr.push(render('templates/pcb/micro.ejs', microData));
 
     return {
       modules: this.modulesArr.join(''),
