@@ -5,10 +5,26 @@ class Keyboard {
     this.layoutStr = layoutStr;
     this.json = JSON.parse(layoutStr);
     this.parseLayout();
+    this.validateKeys();
   }
 
   forEach(cb) {
     this.keys.forEach(cb);
+  }
+
+  validateKeys() {
+    const set = new Set();
+    this.forEach(k => {
+      let name = k.name;
+      while (set.has(name)) {
+        const num = name.replace(/^\D+/g, '');
+        const prefix = name.replace(/\d+$/g, '');
+        const i = num ? parseInt(num, 10) + 1 : 1;
+        name = `${prefix}${i}`;
+        k.name = name;
+      }
+      set.add(k.name);
+    });
   }
 
   parseLayout() {

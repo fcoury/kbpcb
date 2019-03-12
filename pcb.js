@@ -15,7 +15,7 @@ const Micro = require('./micro');
 const render = require('./render');
 
 class Pcb {
-  constructor(layout, gap=2) {
+  constructor(layout, gap=3) {
     this.layout = layout;
     this.modules = [];
     this.components = [];
@@ -109,6 +109,21 @@ class Pcb {
     micro.connectPads(16, xCap1, 1);
     micro.connectPads(17, xCap2, 1);
     micro.connectPads(33, r2, 1);
+
+    const padMatrixOrder = [
+      [18, 19, 20, 21, 25, 22, 26],                                // rows
+      [41, 40, 39, 38, 37, 8, 9, 10, 11, 28, 29, 30, 12, 31, 32],  // columns
+    ];
+
+    [...Array(keyboard.rows)].forEach((_, r) => {
+      const pad = padMatrixOrder[0].pop();
+      micro.setPad(pad, `/row${r}`);
+    });
+
+    [...Array(keyboard.cols)].forEach((_, c) => {
+      const pad = padMatrixOrder[1].pop();
+      micro.setPad(pad, `/col${c}`);
+    });
 
     this.modules.push(r1.render(r1x, r1y));
     this.modules.push(reset.render(rx, ry));
