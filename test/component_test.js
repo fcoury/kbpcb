@@ -3,7 +3,7 @@ const { expect } = require('chai');
 
 require('../id');
 
-const comp = new Component('test', 'D1', 2, () => 123);
+const comp = new Component('test', 'D1', 2, null, () => 123);
 
 describe('Component', () => {
   context('rendering', () => {
@@ -25,8 +25,8 @@ describe('Component', () => {
 
     it('renders default pads', () => {
       const str = comp.render(10, 15);
-      expect(str).to.contain('(net 1 "Net-(D1-Pad1)")');
-      expect(str).to.contain('(net 2 "Net-(D1-Pad2)")');
+      expect(str).to.contain('(net 3 "Net-(D1-Pad1)")');
+      expect(str).to.contain('(net 4 "Net-(D1-Pad2)")');
     });
 
     it('renders connected nets', () => {

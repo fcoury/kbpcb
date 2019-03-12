@@ -1,12 +1,15 @@
 const { expect } = require('chai');
 
+const NetRepo = require('../netRepo').instance;
 const Diode = require('../diode');
 
 describe('Diode', () => {
   let diode;
 
   beforeEach(() => {
-    const key = { name: 'X' };
+    NetRepo.add('/col1');
+    NetRepo.add('/row1');
+    const key = { name: 'X', row: 1, col: 1 };
     diode = new Diode(key);
     console.log('diode.name', diode.name);
   });
@@ -23,7 +26,7 @@ describe('Diode', () => {
     });
 
     it('sets the pads', () => {
-      expect(str).to.contain('Net-(D_X-Pad1)');
+      expect(str).to.contain('"/col1"');
       expect(str).to.contain('Net-(D_X-Pad2)');
     });
   });

@@ -14,7 +14,7 @@ const Micro = require('./micro');
 
 const render = require('./render');
 
-class Pcb {
+class KiCad {
   constructor(layout, gap=3) {
     this.layout = layout;
     this.modules = [];
@@ -145,10 +145,10 @@ class Pcb {
     const components = this.components.join('');
     const nets = NetRepo.array;
     return [
-      render('templates/pcb.ejs', { modules, nets }),
       render('templates/matrix.ejs', { components, nets }),
+      render('templates/pcb.ejs', { modules, nets }),
     ];
   }
 }
 
-module.exports = Pcb;
+module.exports = (file, options) => new KiCad(file).generate();

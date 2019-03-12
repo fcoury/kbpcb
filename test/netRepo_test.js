@@ -22,25 +22,25 @@ describe('NetRepo', () => {
 
     describe('#array', () => {
       it('returns array representation', () => {
-        expect(netRepo.array.length).to.eql(4);
+        expect(netRepo.array.length).to.eql(6);
       });
 
       it('returns items', () => {
-        expect(netRepo.array[1]).to.eql('One');
-        expect(netRepo.array[2]).to.eql('Two');
-        expect(netRepo.array[3]).to.eql('Three');
+        expect(netRepo.array[3]).to.eql('One');
+        expect(netRepo.array[4]).to.eql('Two');
+        expect(netRepo.array[5]).to.eql('Three');
       });
     });
 
     describe('#indexOf', () => {
       it('returns the index of a given net', () => {
-        expect(netRepo.indexOf('One')).to.eql(1);
+        expect(netRepo.indexOf('One')).to.eql(3);
       });
     });
 
     describe('#format', () => {
       it('returns formatted net', () => {
-        expect(netRepo.format('One')).to.eql('(net 1 "One")');
+        expect(netRepo.format('One')).to.eql('(net 3 "One")');
       });
     });
   });

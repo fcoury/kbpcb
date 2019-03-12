@@ -5,9 +5,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const formidable = require('formidable')
 
+require('./id');
+
 const parseLayout = require('./layout');
 const genSchematics = require('./schematics');
-const genPCB = require('./pcb');
+const genKiCad = require('./kicad');
 
 const { addFolder, makeZip } = require('./zip');
 
@@ -28,19 +30,12 @@ app.post('/submit', (req, res) => {
       console.log('files.document', files.document.toJSON());
       const { document } = files;
       const docName = path.basename(document.name).split('.')[0];
-      const data = JSON.parse(fs.readFileSync(document.path, 'utf8'));
-      const { layout } = parseLayout(data, docName);
       const name = fields.name || docName;
-      console.log('fields', fields);
-      const borders = {
-        edge:    fields.borderSpacing,
-        corners: fields.borderRound,
-      };
-
+      const kicad = genKiCad(fs.readFileSync(document.path, 'utf8'));
       const zipFiles = [
         [`${name}.pro`, fs.readFileSync('templates/project.pro')],
-        [`${name}.sch`, genSchematics(layout).matrix],
-        [`${name}.kicad_pcb`, genPCB(layout, borders)],
+        [`${name}.sch`, kicad[0]],
+        [`${name}.kicad_pcb`, kicad[1]],
         [`sym-lib-table`, fs.readFileSync('templates/sym-lib-table')],
         [`fp-lib-table`, fs.readFileSync('templates/fp-lib-table')],
       ];
