@@ -14,9 +14,9 @@ if (!exists) {
 }
 
 class Component {
-  constructor(type, compName, pads, _genId=genId, _netRepo) {
+  constructor(type, compName, pads, prefix, _genId=genId, _netRepo) {
     this.type = type;
-    this.name = compName || `${type.charAt(0).toUpperCase()}${this.getNext()}`;
+    this.name = compName || `${prefix || type.charAt(0).toUpperCase()}${this.getNext()}`;
     this.pads = [];
     this.id = _genId();
     this.netRepo = _netRepo;
@@ -54,7 +54,7 @@ class Component {
     return this.pads[n-1];
   }
 
-  connect(sourcePad, targetPad, targetComp) {
+  connectPads(sourcePad, targetComp, targetPad) {
     const targetNet = targetComp.pad(targetPad);
     this.setPad(sourcePad, targetNet);
   }

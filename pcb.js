@@ -2,16 +2,22 @@ const NetRepo  = require('./netRepo').instance;
 
 const Keyboard = require('./keyboard');
 const Switch = require('./switch');
+const Cap = require('./cap');
 const Diode = require('./diode');
+const Resistor = require('./resistor');
 const Frame = require('./frame');
 const Plane = require('./plane');
+const Usb = require('./usb');
+const Crystal = require('./crystal');
+const Micro = require('./micro');
 
 const render = require('./render');
 
 class Pcb {
-  constructor(layout) {
+  constructor(layout, gap=2) {
     this.layout = layout;
     this.modules = [];
+    this.gap = gap;
   }
 
   generate() {
@@ -24,14 +30,92 @@ class Pcb {
     keyboard.forEach(k => {
       const theSwitch = new Switch(k);
       const diode     = new Diode(k);
-      theSwitch.connect(2, 2, diode);
+      theSwitch.connectPads(2, diode, 2);
       this.modules.push(theSwitch.render(k.x, k.y, k.rotation));
       this.modules.push(diode.render(k.x - 0.5, k.y, 90));
     });
 
-    this.modules.push(new Frame(keyboard).render(2));
-    this.modules.push(new Plane(keyboard, 'GND', 'F.Cu').render(2));
-    this.modules.push(new Plane(keyboard, 'VCC', 'B.Cu').render(2));
+    this.modules.push(new Frame(keyboard).render(this.gap));
+    this.modules.push(new Plane(keyboard, 'GND', 'F.Cu').render(this.gap + 1));
+    this.modules.push(new Plane(keyboard, 'VCC', 'B.Cu').render(this.gap + 1));
+
+    const limitx = (keyboard.width * 1905) / 100;
+
+    const xCap1 = new Cap();
+    const xc1x = limitx + 5;
+    const xc1y = 20;
+
+    const xCap2 = new Cap();
+    const xc2x = limitx + 15;
+    const xc2y = 20;
+
+    const crystal = new Crystal();
+    const xx = limitx + 10;
+    const xy = 20;
+
+    crystal.connectPads(1, xCap1, 1);
+    crystal.connectPads(1, xCap2, 2);
+
+    this.modules.push(xCap1.render(xc1x, xc1y));
+    this.modules.push(xCap2.render(xc2x, xc2y));
+    this.modules.push(crystal.render(xx, xy));
+
+    // microcontroller
+    const r1 = new Resistor('10k');
+    r1.setPad(2, 'VCC');
+    const r1x = limitx + 14;
+    const r1y = -5;
+
+    const r2 = new Resistor('10k');
+    r2.setPad(2, 'GND');
+    const r2x = limitx + 25;
+    const r2y = 8;
+
+    const r3 = new Resistor('22u');
+    const r3x = limitx + 5;
+    const r3y = 8;
+
+    const r4 = new Resistor('22u');
+    const r4x = limitx + 5;
+    const r4y = 12;
+
+    const usb = new Usb();
+    const ux = limitx / 2;
+    const uy = this.gap + 2;
+
+    r3.connectPads(2, usb, 2);
+    r4.connectPads(2, usb, 3);
+
+    const uCap1 = new Cap(); // old C8
+    const uc1x = limitx + 5;
+    const uc1y = 5;
+
+    const micro = new Micro();
+    const mx = limitx + 14;
+    const my = 5;
+
+    micro.connectPads(3, r3, 1);
+    micro.connectPads(4, r4, 1);
+    micro.connectPads(6, uCap1, 1);
+    micro.connectPads(13, r1, 1);
+    micro.connectPads(16, xCap1, 1);
+    micro.connectPads(17, xCap2, 1);
+    micro.connectPads(33, r2, 1);
+
+    this.modules.push(r1.render(r1x, r1y));
+    this.modules.push(r2.render(r2x, r2y));
+    this.modules.push(r3.render(r3x, r3y));
+    this.modules.push(r4.render(r4x, r4y));
+    this.modules.push(usb.render(ux, uy));
+    this.modules.push(uCap1.render(uc1x, uc1y));
+    this.modules.push(micro.render(mx, my));
+
+    // decoupling capacitors
+    [...Array(4)].forEach((_, i) => {
+      const dCap = new Cap();
+      dCap.setPad(1, 'VCC');
+      this.modules.push(dCap.render(limitx + 5 + (i*5), 30));
+    });
 
     const modules = this.modules.join('');
     const nets = NetRepo.array;

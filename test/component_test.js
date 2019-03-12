@@ -32,7 +32,7 @@ describe('Component', () => {
     it('renders connected nets', () => {
       const comp1 = new Component('test', 'D1', 2, () => 123);
       const comp2 = new Component('test', 'D2', 2, () => 123);
-      comp1.connect(1, 2, comp2);
+      comp1.connectPads(1, comp2, 2);
 
       const str = comp1.render(10, 15);
       expect(str).to.contain('"Net-(D2-Pad2)"');
