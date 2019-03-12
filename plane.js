@@ -1,8 +1,8 @@
 const Rectangular = require('./rectangular');
 
 class Plane extends Rectangular {
-  constructor(kb, name, layer) {
-    super(kb, 'plane', name);
+  constructor(kb, name, layer, gap=2) {
+    super(kb, 'plane', name, gap);
     this.layer = layer;
   }
 

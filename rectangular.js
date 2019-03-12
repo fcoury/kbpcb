@@ -14,7 +14,11 @@ class Rectangular extends Component {
     return { x1, y1 };
   }
 
-  render() {
+  render(gap=0) {
+    this.x -= gap;
+    this.y -= gap;
+    this.x1 += gap;
+    this.y1 += gap;
     return super.render(this.x, this.y);
   }
 }
