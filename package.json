@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha test/*.test.js test/**/*.test.js",
+    "test": "./node_modules/.bin/mocha",
+    "test:watch": "./node_modules/.bin/mocha -w --extension js,ejs",
     "start": "node index.js"
   },
   "author": "Felipe Coury <felipe.coury@gmail.com>",
