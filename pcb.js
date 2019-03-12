@@ -18,6 +18,7 @@ class Pcb {
   constructor(layout, gap=2) {
     this.layout = layout;
     this.modules = [];
+    this.components = [];
     this.gap = gap;
   }
 
@@ -34,6 +35,7 @@ class Pcb {
       theSwitch.connectPads(2, diode, 2);
       this.modules.push(theSwitch.render(k.x, k.y, k.rotation));
       this.modules.push(diode.render(k.x - 0.5, k.y, 90));
+      this.components.push(theSwitch.renderSch(k))
     });
 
     this.modules.push(new Frame(keyboard).render(this.gap));
@@ -125,8 +127,12 @@ class Pcb {
     });
 
     const modules = this.modules.join('');
+    const components = this.components.join('');
     const nets = NetRepo.array;
-    return render('templates/pcb.ejs', { modules, nets });
+    return [
+      render('templates/pcb.ejs', { modules, nets }),
+      render('templates/matrix.ejs', { components, nets }),
+    ];
   }
 }
 

@@ -71,6 +71,12 @@ class Component {
 
     return render(`templates/pcb/${this.type}.ejs`, { data });
   }
+
+  renderSch(key) {
+    const { id, name } = this;
+    const data = { id, name, key };
+    return render(`templates/schematics/${this.type}.ejs`, { data });
+  }
 }
 
 module.exports = Component;

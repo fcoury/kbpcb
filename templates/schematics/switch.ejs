@@ -1,11 +1,41 @@
-$Comp
-L keyboard_parts:KEYSW K_<%= key.name %>
-U 1 1 <%= genId() %>
-P <%= key.x %> <%= key.y %>
-F 0 "K_<%= key.name %>" H <%= key.x %> <%= key.y + 233 %> 60  0000 C CNN
-F 1 "KEYSW" H <%= key.x %> <%= key.y - 100 %> 60  0001 C CNN
-F 2 "MX_Alps_Hybrid:MX-<%= key.size %>U-NoLED" H <%= key.x %> <%= key.y %> 60  0001 C CNN
-F 3 "" H <%= key.x %> <%= key.y %> 60  0000 C CNN
-	1    <%= key.x %> <%= key.y %>
+<%
+const x = data.key.col * 1000;
+const y = data.key.row * 1000;
+%>$Comp
+L keyboard_parts:KEYSW <%= data.name %>
+U 1 1 <%= data.id %>
+P <%= x %> <%= y %>
+F 0 "<%= data.name %>" H <%= x %> <%= y + 233 %> 60  0000 C CNN
+F 1 "KEYSW" H <%= x %> <%= y - 100 %> 60  0001 C CNN
+F 2 "MX_Alps_Hybrid:MX-<%= data.key.size %>U-NoLED" H <%= x %> <%= y %> 60  0001 C CNN
+F 3 "" H <%= x %> <%= y %> 60  0000 C CNN
+	1    <%= x %> <%= y %>
 	1    0    0    -1
 $EndComp
+$Comp
+L Device:D <%= data.name %>
+U 1 1 <%= data.id %>
+P <%= x - 350 %> <%= y + 250 %>
+F 0 "D_<%= data.name %>" V <%= x - 304 %> <%= y + 250 - 79 %> 50  0000 R CNN
+F 1 "D" V <%= x - 405 %> <%= y + 250 - 79 %> 50  0000 R CNN
+F 2 "keyboard_parts:D_SOD123_axial" H <%= x - 350 %> <%= y + 250 %> 50  0001 C CNN
+F 3 "~" H <%= x - 350 %> <%= y + 250 %> 50  0001 C CNN
+	1    <%= x - 350 %>  <%= y + 250 %>
+	0    -1   -1   0
+$EndComp
+<% if (data.key.col === 0) { %>
+Text GLabel <%= x - 1350 %> <%= y + 400 %> 0    50   Input ~ 0
+col<%= data.key.col %>
+<% } %>
+<% if (data.key.col > 0) { %>
+Wire Wire Line
+	<%= x - 1350 %> <%= y + 400 %> <%= x - 350 %> <%= y + 400 %>
+<% } %>
+<% if (data.key.row > 0) { %>
+Wire Wire Line
+	<%= x + 300 %> <%= y - 1000 %> <%= x + 300 %> <%= y %>
+<% } %>
+Wire Wire Line
+	<%= x - 300 %> <%= y %> <%= x - 350 %> <%= y %>
+Wire Wire Line
+	<%= x - 350 %> <%= y %> <%= x - 350 %> <%= y + 100 %>

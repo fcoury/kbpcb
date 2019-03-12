@@ -1,15 +1,15 @@
 $Comp
-L Device:D D_<%= key.name %>
-U 1 1 <%= genId() %>
-P <%= key.x - 350 %> <%= key.y + 250 %>
-F 0 "D_<%= key.name %>" V <%= key.x - 304 %> <%= key.y + 250 - 79 %> 50  0000 R CNN
-F 1 "D" V <%= key.x - 405 %> <%= key.y + 250 - 79 %> 50  0000 R CNN
-F 2 "keyboard_parts:D_SOD123_axial" H <%= key.x - 350 %> <%= key.y + 250 %> 50  0001 C CNN
-F 3 "~" H <%= key.x - 350 %> <%= key.y + 250 %> 50  0001 C CNN
-	1    <%= key.x - 350 %>  <%= key.y + 250 %>
+L Device:D <%= data.name %>
+U 1 1 <%= data.id %>
+P <%= data.key.x - 350 %> <%= data.key.y + 250 %>
+F 0 "<%= data.name %>" V <%= data.key.x - 304 %> <%= data.key.y + 250 - 79 %> 50  0000 R CNN
+F 1 "D" V <%= data.key.x - 405 %> <%= data.key.y + 250 - 79 %> 50  0000 R CNN
+F 2 "keyboard_parts:D_SOD123_axial" H <%= data.key.x - 350 %> <%= data.key.y + 250 %> 50  0001 C CNN
+F 3 "~" H <%= data.key.x - 350 %> <%= data.key.y + 250 %> 50  0001 C CNN
+	1    <%= data.key.x - 350 %>  <%= data.key.y + 250 %>
 	0    -1   -1   0
 $EndComp
 Wire Wire Line
-	<%= key.x - 300 %> <%= key.y %> <%= key.x - 350 %> <%= key.y %>
+	<%= data.key.x - 300 %> <%= data.key.y %> <%= data.key.x - 350 %> <%= data.key.y %>
 Wire Wire Line
-	<%= key.x - 350 %> <%= key.y %> <%= key.x - 350 %> <%= key.y + 100 %>
+	<%= data.key.x - 350 %> <%= data.key.y %> <%= data.key.x - 350 %> <%= data.key.y + 100 %>
