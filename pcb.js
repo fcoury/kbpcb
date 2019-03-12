@@ -8,6 +8,7 @@ const Resistor = require('./resistor');
 const Frame = require('./frame');
 const Plane = require('./plane');
 const Usb = require('./usb');
+const Reset = require('./reset');
 const Crystal = require('./crystal');
 const Micro = require('./micro');
 
@@ -66,6 +67,11 @@ class Pcb {
     const r1x = limitx + 14;
     const r1y = -5;
 
+    const reset = new Reset();
+    const rx = limitx + 14;
+    const ry = -10;
+    reset.connectPads(2, r1, 1);
+
     const r2 = new Resistor('10k');
     r2.setPad(2, 'GND');
     const r2x = limitx + 25;
@@ -103,6 +109,7 @@ class Pcb {
     micro.connectPads(33, r2, 1);
 
     this.modules.push(r1.render(r1x, r1y));
+    this.modules.push(reset.render(rx, ry));
     this.modules.push(r2.render(r2x, r2y));
     this.modules.push(r3.render(r3x, r3y));
     this.modules.push(r4.render(r4x, r4y));
