@@ -78,7 +78,9 @@ class Component {
 
   renderSch(key) {
     const { id, name } = this;
-    const data = { id, name, key };
+    const x = (this.initX * 100) + (key.col * 1000);
+    const y = (this.initY * 100) + (key.row * 1000);
+    const data = { id, name, key, x, y };
     return render(`templates/schematics/${this.type}.ejs`, { data });
   }
 }
