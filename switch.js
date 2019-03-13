@@ -7,8 +7,13 @@ class Switch extends Component {
     this.leds = leds;
   }
 
-  getAdditionalData() {
-    return { key: this.key, leds: this.leds };
+  getAdditionalData(x, y, rotation) {
+    return {
+      key: this.key,
+      leds: this.leds,
+      x: ((x + 0.5 + ((this.key.size-1)/2)) * 1905) / 100,
+      y: ((y + 0.5) * 1905) / 100,
+    };
   }
 }
 

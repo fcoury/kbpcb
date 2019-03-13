@@ -1,6 +1,7 @@
 const NetRepo  = require('./netRepo').instance;
 
 const Keyboard = require('./keyboard');
+const Component = require('./component');
 const Switch = require('./switch');
 const Cap = require('./cap');
 const Diode = require('./diode');
@@ -15,12 +16,14 @@ const Micro = require('./micro');
 const render = require('./render');
 
 class KiCad {
-  constructor(layout, options) {
+  constructor(layout, options={}) {
     this.layout = layout;
     this.modules = [];
     this.components = [];
     this.gap = options.gap || 3;
     this.leds = options.leds;
+    Component.options.initX = options.x || 0;
+    Component.options.initY = options.y || 0;
   }
 
   generate() {

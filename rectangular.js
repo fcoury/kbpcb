@@ -15,10 +15,10 @@ class Rectangular extends Component {
   }
 
   render(gap=0) {
-    this.x -= gap;
-    this.y -= gap;
-    this.x1 += gap;
-    this.y1 += gap;
+    this.x = this.x - gap;
+    this.y = this.y - gap;
+    this.x1 += this.initX + gap;
+    this.y1 += this.initY + gap;
     return super.render(this.x, this.y);
   }
 }

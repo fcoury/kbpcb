@@ -30,7 +30,11 @@ app.post('/submit', (req, res) => {
       const { document } = files;
       const docName = path.basename(document.name).split('.')[0];
       const name = fields.name || docName;
-      const options = { leds: !!fields.leds };
+      const options = {
+        leds: !!fields.leds,
+        x: 20,
+        y: 20,
+      };
       const kicad = genKiCad(
         fs.readFileSync(document.path, 'utf8'),
         options);

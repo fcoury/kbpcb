@@ -20,6 +20,8 @@ class Component {
     this.pads = [];
     this.id = _genId();
     this.netRepo = _netRepo;
+    this.initX = Component.options.initX;
+    this.initY = Component.options.initY;
 
     for (let index = 0; index < pads; index++) {
       this.addPad();
@@ -59,15 +61,17 @@ class Component {
     this.setPad(sourcePad, targetNet);
   }
 
-  getAdditionalData() {
+  getAdditionalData(x, y, rotation) {
     return {};
   }
 
   render(x, y, rotation) {
     const { id, name } = this;
     const netForPad = this.netForPad.bind(this);
-    const additionalData = this.getAdditionalData();
+    const additionalData = this.getAdditionalData(x, y, rotation);
     const data = { id, name, x, y, rotation, netForPad, ...additionalData };
+    data.x = data.x + Component.options.initX;
+    data.y = data.y + Component.options.initY;
 
     return render(`templates/pcb/${this.type}.ejs`, { data });
   }
@@ -78,5 +82,7 @@ class Component {
     return render(`templates/schematics/${this.type}.ejs`, { data });
   }
 }
+
+Component.options = { initX: 0, initY: 0 };
 
 module.exports = Component;
