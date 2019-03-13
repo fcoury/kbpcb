@@ -15,11 +15,12 @@ const Micro = require('./micro');
 const render = require('./render');
 
 class KiCad {
-  constructor(layout, gap=3) {
+  constructor(layout, options) {
     this.layout = layout;
     this.modules = [];
     this.components = [];
-    this.gap = gap;
+    this.gap = options.gap || 3;
+    this.leds = options.leds;
   }
 
   generate() {
@@ -30,7 +31,7 @@ class KiCad {
     [...Array(keyboard.rows+1)].forEach((_, i) => NetRepo.add(`/row${i}`));
 
     keyboard.forEach(k => {
-      const theSwitch = new Switch(k);
+      const theSwitch = new Switch(k, this.leds);
       const diode     = new Diode(k);
       theSwitch.connectPads(2, diode, 2);
       this.modules.push(theSwitch.render(k.x, k.y, k.rotation));
@@ -151,4 +152,4 @@ class KiCad {
   }
 }
 
-module.exports = (file, options) => new KiCad(file).generate();
+module.exports = (file, options) => new KiCad(file, options).generate();

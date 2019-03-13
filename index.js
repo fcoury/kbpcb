@@ -27,11 +27,13 @@ app.post('/submit', (req, res) => {
       if (files.document.type !== 'application/json') {
         return res.redirect('/?error=Only+JSON+files+accepted');
       }
-      console.log('files.document', files.document.toJSON());
       const { document } = files;
       const docName = path.basename(document.name).split('.')[0];
       const name = fields.name || docName;
-      const kicad = genKiCad(fs.readFileSync(document.path, 'utf8'));
+      const options = { leds: !!fields.leds };
+      const kicad = genKiCad(
+        fs.readFileSync(document.path, 'utf8'),
+        options);
       const zipFiles = [
         [`${name}.pro`, fs.readFileSync('templates/project.pro')],
         [`${name}.sch`, kicad[0]],
