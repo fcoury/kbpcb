@@ -7,11 +7,16 @@
     "test": "./node_modules/.bin/mocha",
     "test:watch": "./node_modules/.bin/mocha -w --extension js,ejs",
     "start": "node index.js",
-    "start:dev": "nodemon index.js"
+    "start:dev": "nodemon index.js",
+    "build": "cd client && react-scripts build",
+    "eject": "cd client && react-scripts eject",
+    "cli:start": "cd client && react-scripts start",
+    "cli:test": "cd client && react-scripts test"
   },
   "author": "Felipe Coury <felipe.coury@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "bloomer": "0.6.5",
     "body-parser": "^1.18.3",
     "ejs": "^2.6.1",
     "ejs-lint": "^0.3.0",
@@ -25,6 +30,18 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "mocha": "^6.0.2",
-    "nodemon": "^1.18.10"
-  }
+    "nodemon": "^1.18.10",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4",
+    "react-scripts": "2.1.8"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
