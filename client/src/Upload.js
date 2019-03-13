@@ -15,16 +15,17 @@ export default class Upload extends Component {
     const reader = new FileReader();
     reader.onload = (e) => {
       const result = e.target.result;
-      this.props.onReady(result);
+      this.props.onUploaded(file, result);
     };
+    reader.readAsText(file);
   }
 
   render() {
-    const fileName = this.state.file && <span class="file-name">{this.state.file}</span>;
+    const fileName = this.state.file && <span className="file-name">{this.state.file}</span>;
     return (
       <Field>
-        <div class="file is-boxed">
-          <label class="file-label">
+        <div className="file is-boxed">
+          <label className="file-label">
             <Dropzone onDrop={this.onDrop.bind(this)}>
               {({getRootProps, getInputProps, isDragActive}) => (
                 <div {...getRootProps()}>
