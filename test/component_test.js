@@ -1,7 +1,7 @@
-const Component = require('../component');
 const { expect } = require('chai');
 
-require('../id');
+const Component = require('../src/components/component');
+require('../src/id');
 
 const comp = new Component('test', 'D1', 2, null, () => 123);
 

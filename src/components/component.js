@@ -1,7 +1,7 @@
 const randomHex = require('random-hex-string').sync;
 
-const NetRepo  = require('./netRepo').instance;
-const render = require('./render');
+const NetRepo  = require('../netRepo').instance;
+const render = require('../render');
 const genId = () => `${prefix}${randomHex(2)}`.toUpperCase();
 
 const COMP_COUNTER = Symbol.for("MrKeebs.KbPCB.ComponentCounter");

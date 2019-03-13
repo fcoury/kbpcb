@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 
-const NetRepo = require('../netRepo').instance;
-const Diode = require('../diode');
+const NetRepo = require('../src/netRepo').instance;
+const Diode = require('../src/components/diode');
 
 describe('Diode', () => {
   let diode;

@@ -2,12 +2,12 @@ const fs = require('fs');
 const JSZip = require('jszip');
 
 const addFolder = (files, folder) => {
-  fs.readdirSync(`${__dirname}/${folder}`).forEach(file => {
+  fs.readdirSync(`${folder}`).forEach(file => {
     const fileName = `${folder}/${file}`;
-    if (fs.lstatSync(`${__dirname}/${fileName}`).isDirectory()) {
+    if (fs.lstatSync(`${fileName}`).isDirectory()) {
       addFolder(files, fileName);
     } else {
-      files.push([fileName, fs.readFileSync(`${__dirname}/${fileName}`, 'utf8')]);
+      files.push([fileName, fs.readFileSync(`${fileName}`, 'utf8')]);
     }
   });
 }

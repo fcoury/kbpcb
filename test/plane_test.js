@@ -1,4 +1,4 @@
-const Plane = require('../plane');
+const Plane = require('../src/components/plane');
 
 describe('Plane', () => {
   it('returns the coordinates', () => {

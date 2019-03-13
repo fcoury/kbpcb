@@ -5,13 +5,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const formidable = require('formidable')
 
-require('./id');
+require('./src/id');
 
-const parseLayout = require('./layout');
-const genSchematics = require('./schematics');
-const genKiCad = require('./kicad');
+const parseLayout = require('./src/layout');
+const genSchematics = require('./src/schematics');
+const genKiCad = require('./src/kicad');
 
-const { addFolder, makeZip } = require('./zip');
+const { addFolder, makeZip } = require('./src/zip');
 
 const app = express();
 app.use(bodyParser.json({limit: '50mb'}));
@@ -45,9 +45,9 @@ app.post('/submit', (req, res) => {
         [`sym-lib-table`, fs.readFileSync('templates/sym-lib-table')],
         [`fp-lib-table`, fs.readFileSync('templates/fp-lib-table')],
       ];
-      addFolder(zipFiles, 'kicad_lib_tmk');
-      addFolder(zipFiles, 'keyboard_parts.pretty');
-      addFolder(zipFiles, 'MX_Alps_Hybrid.pretty');
+      addFolder(zipFiles, 'footprints/kicad_lib_tmk');
+      addFolder(zipFiles, 'footprints/keyboard_parts.pretty');
+      addFolder(zipFiles, 'footprints/MX_Alps_Hybrid.pretty');
 
       zip = makeZip(res, zipFiles);
 

@@ -1,7 +1,7 @@
 const fs = require('fs');
 const { expect } = require('chai');
 
-const Keyboard = require('../keyboard');
+const Keyboard = require('../src/keyboard');
 
 describe('Keyboard', () => {
   it('does something', () => {

@@ -1,17 +1,17 @@
 const NetRepo  = require('./netRepo').instance;
 
 const Keyboard = require('./keyboard');
-const Component = require('./component');
-const Switch = require('./switch');
-const Cap = require('./cap');
-const Diode = require('./diode');
-const Resistor = require('./resistor');
-const Frame = require('./frame');
-const Plane = require('./plane');
-const Usb = require('./usb');
-const Reset = require('./reset');
-const Crystal = require('./crystal');
-const Micro = require('./micro');
+const Component = require('./components/component');
+const Switch = require('./components/switch');
+const Cap = require('./components/cap');
+const Diode = require('./components/diode');
+const Resistor = require('./components/resistor');
+const Frame = require('./components/frame');
+const Plane = require('./components/plane');
+const Usb = require('./components/usb');
+const Reset = require('./components/reset');
+const Crystal = require('./components/crystal');
+const Micro = require('./components/micro');
 
 const render = require('./render');
 

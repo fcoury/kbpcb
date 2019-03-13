@@ -1,6 +1,6 @@
 const { expect } = require('chai');
 
-const { instance } = require('../netRepo');
+const { instance } = require('../src/netRepo');
 
 describe('NetRepo', () => {
   describe('#instance', () => {
