@@ -33,18 +33,9 @@ class KiCad {
     [...Array(keyboard.cols+1)].forEach((_, i) => NetRepo.add(`/col${i}`));
     [...Array(keyboard.rows+1)].forEach((_, i) => NetRepo.add(`/row${i}`));
 
-    let uniques = new Set();
-
+    let i = 1
     keyboard.forEach(k => {
-      k.name.replace(/[^\x00-\x7F]/g, "");
-
-      let i = 1;
-      let candidate = `${k.name}_${i}`;
-      while(uniques.has(candidate)){
-        i++;
-        candidate = `${k.name}_${i}`;
-      }
-      k.name = candidate;
+      k.name = `${i++}`;
 
       const theSwitch = new Switch(k, this.leds);
       const diode     = new Diode(k);
