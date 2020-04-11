@@ -34,6 +34,8 @@ class KiCad {
     [...Array(keyboard.rows+1)].forEach((_, i) => NetRepo.add(`/row${i}`));
 
     keyboard.forEach(k => {
+      k.name.replace(/[^\x00-\x7F]/g, "");
+
       const theSwitch = new Switch(k, this.leds);
       const diode     = new Diode(k);
       theSwitch.connectPads(2, diode, 2);
