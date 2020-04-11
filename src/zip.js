@@ -4,10 +4,11 @@ const JSZip = require('jszip');
 const addFolder = (files, folder) => {
   fs.readdirSync(`${folder}`).forEach(file => {
     const fileName = `${folder}/${file}`;
+    const fileNameWithoutFootprint = fileName.replace("footprints/", "");
     if (fs.lstatSync(`${fileName}`).isDirectory()) {
       addFolder(files, fileName);
     } else {
-      files.push([fileName, fs.readFileSync(`${fileName}`, 'utf8')]);
+      files.push([fileNameWithoutFootprint, fs.readFileSync(`${fileName}`, 'utf8')]);
     }
   });
 }
