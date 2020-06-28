@@ -33,7 +33,10 @@ class KiCad {
     [...Array(keyboard.cols+1)].forEach((_, i) => NetRepo.add(`/col${i}`));
     [...Array(keyboard.rows+1)].forEach((_, i) => NetRepo.add(`/row${i}`));
 
+    let i = 1
     keyboard.forEach(k => {
+      k.name = `${i++}`;
+
       const theSwitch = new Switch(k, this.leds);
       const diode     = new Diode(k);
       theSwitch.connectPads(2, diode, 2);

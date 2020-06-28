@@ -2,3 +2,10 @@ node_modules
 output
 .DS_Store
 yarn-error.log
+
+.idea/.gitignore
+.idea/kbpcb.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+package-lock.json
