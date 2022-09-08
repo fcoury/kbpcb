@@ -18,7 +18,7 @@
     "express": "^4.16.4",
     "formidable": "^1.2.1",
     "git": "^0.1.5",
-    "jszip": "^3.2.0",
+    "jszip": "^3.7.0",
     "random-hex-string": "^1.0.0",
     "sexpr-plus": "^7.0.0"
   },
